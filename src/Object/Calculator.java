@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -29,6 +30,7 @@ public class Calculator extends Application {
         display.setEditable(false);
         display.setPrefHeight(50);
         
+        display.setFont(Font.font("Arial", 18));
         display.setStyle("-fx-background-color: #333333; -fx-text-fill: white; -fx-border-color: black; -fx-border-width: 2px;");
 
         GridPane root = new GridPane();
@@ -50,19 +52,27 @@ public class Calculator extends Application {
         
         // %
       //Iterates through each button, can work for infinite buttons
+        double buttonWidth = 65;
+        double buttonHeight = 50;
         int index = 0; 
         for (int row = 1; index < buttonLabels.length; row++) {
             for (int col = 0; col < 4 && index < buttonLabels.length; col++) {
                 String label = buttonLabels[index++];
                 Button button = new Button(label);
-                button.setPrefSize(50, 50);
+                button.setPrefSize(buttonWidth, buttonHeight);
+                
+                if (label.equals("SIN") || label.equals("COS") || label.equals("TAN")) {
+                	button.setFont(Font.font("Rubik", 14));
+                } else {
+                	button.setFont(Font.font("Rubik", 18));
+                }
                 button.setOnAction(e -> buttonClicked(label));
                 root.add(button, col, row);
             }
         }
         
 
-        Scene scene = new Scene(root, 220, 300);
+        Scene scene = new Scene(root, 300, 320);
         primaryStage.setTitle("Calculator");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -110,8 +120,13 @@ public class Calculator extends Application {
             expression.setLength(0);
             isResultDisplayed = false;
         } else if ("SIN".equals(label) || "COS".equals(label) || "TAN".equals(label)) {
+        	String currentText = display.getText();
+        	if (currentText.isEmpty()) {
+        		display.setText("0");
+        		currentText = "0";
+        	}
             try {
-                double value = Double.parseDouble(display.getText());
+                double value = Double.parseDouble(currentText);
                 double result = calculate(value, 0, label);
                 display.setText(String.valueOf(result));
                 expression.setLength(0);
@@ -167,6 +182,9 @@ public class Calculator extends Application {
     }
 
     public static void main(String[] args) {
+    	/*for (String fontName : Font.getFamilies()) {
+    	    System.out.println(fontName);
+    }*/
         launch(args);
     }
 }

@@ -1,5 +1,5 @@
 module CalculatorProject {
-	//basic javafx 
+	//basic javaFX 
     requires javafx.controls;
     
     //handles arithmetic containing more than 2 constants
